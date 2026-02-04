@@ -7,15 +7,14 @@ description: My project description
 version: 0.1.0
 
 # Language and tooling
-language: node  # node | python | rust | go
-versioning: semver  # semver | calver | none
+language: node  # node | python
+versioning: semver  # semver | calver | none (default: semver)
 
 # Design patterns by language
 patterns:
   node:
     - name: repository
       description: Use repository pattern for data access
-      file_pattern: "**/repositories/*.js"
       example: |
         // src/repositories/user.repository.js
         export class UserRepository {
@@ -24,45 +23,34 @@ patterns:
         }
     - name: factory
       description: Use factory pattern for test fixtures
-      file_pattern: "**/factories/*.js"
     - name: service-layer
-      description: Business logic in services, not controllers
-      file_pattern: "**/services/*.js"
+      description: Business logic in services, not handlers
   python:
     - name: dataclass
       description: Use dataclasses for DTOs and simple objects
-      file_pattern: "**/*.py"
     - name: context-manager
       description: Use context managers for resource handling
-      file_pattern: "**/*.py"
     - name: abstract-base-class
       description: Use ABCs for interfaces and contracts
-      file_pattern: "**/*.py"
-  rust:
-    - name: builder
-      description: Use Builder pattern for complex structs
-      file_pattern: "**/*.rs"
-    - name: error-chaining
-      description: Chain errors with ? operator
-      file_pattern: "**/*.rs"
-  go:
-    - name: functional-options
-      description: Use functional options for configuration
-      file_pattern: "**/*.go"
-    - name: package-structure
-      description: cmd/ for CLIs, pkg/ for libraries, internal/ for private
-      file_pattern: "**/"
 
-# Anti-patterns to avoid
+# Anti-patterns to avoid (see docs/ANTI_PATTERNS_PROPOSAL.md for details)
 anti_patterns:
   node:
     - name: callback-hell
       description: Nested callbacks make code hard to read
       instead: Use async/await or Promises
       severity: error
+    - name: unhandled-errors
+      description: Not catching promise rejections or errors
+      instead: Always handle or propagate errors
+      severity: error
+    - name: sync-io
+      description: Using synchronous I/O operations
+      instead: Use async/await with fs.promises
+      severity: error
     - name: god-object
-      description: Single class with too many responsibilities
-      instead: Split into focused, single-responsibility classes
+      description: Single class/module with too many responsibilities
+      instead: Split into focused units
       severity: warning
     - name: implicit-any
       description: Missing type annotations
@@ -77,23 +65,17 @@ anti_patterns:
       description: from module import *
       instead: Import specific symbols
       severity: warning
-  rust:
-    - name: unwrap-everywhere
-      description: Excessive use of unwrap()
-      instead: Handle errors explicitly with ?
+    - name: missing-type-hints
+      description: Functions without type annotations
+      instead: Add type hints to all functions
       severity: warning
-    - name: clone-happy
-      description: Unnecessary clones
-      instead: Use references or Arc/Rc where appropriate
-      severity: warning
-  go:
-    - name: error-swallowing
-      description: Ignoring errors with _ blank identifier
-      instead: Handle or log errors explicitly
+    - name: bare-except
+      description: Catching Exception without specific type
+      instead: Catch specific exception types
       severity: error
-    - name: package-bloat
-      description: Putting everything in main package
-      instead: Organize into cmd/, pkg/, internal/
+    - name: no-context-manager
+      description: Not using with statement for resources
+      instead: Use context managers for file/db/network
       severity: warning
 
 # Conventional commits configuration
@@ -109,7 +91,7 @@ commits:
   scopes:
     required: false
 
-# Version bump rules
+# Version bump rules (when versioning is enabled)
 versioning:
   major_triggers:
     - "BREAKING CHANGE"
@@ -123,17 +105,13 @@ versioning:
 
 # Testing requirements
 testing:
-  framework: vitest  # node
   coverage_min: 80
-  test_pattern: "**/*.test.js"
 
 # Documentation requirements
 docs:
   required:
     - README.md
-    - CONTRIBUTING.md
     - LICENSE
-  optional:
-    - API.md
-    - ARCHITECTURE.md
+  recommended:
+    - CONTRIBUTING.md
     - CHANGELOG.md

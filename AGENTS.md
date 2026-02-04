@@ -4,23 +4,32 @@
 
 ## Purpose
 
-This repository contains coding standards, processes, and templates for setting up repositories. When told to "use Monty standards," read this file and follow the appropriate templates.
+This repository contains coding standards, patterns, and anti-patterns - not static templates. When told to "use Monty standards," read this file and apply the guidelines to your code.
+
+## Philosophy
+
+> **Templates are limiting. Guidelines are flexible.**
+
+Instead of copying files, use these standards to:
+- Apply consistent patterns across projects
+- Avoid common mistakes automatically
+- Make code reviews faster
+- Onboard quickly to new projects
 
 ## Quick Start
 
-1. Identify the project type (Node.js, Python, Rust, Go)
-2. Read `.monty.yaml` for project-specific configuration
-3. Copy the template from `templates/<type>/`
-4. Copy common files from root (LICENSE, README.md)
-5. Apply project-specific changes
+1. Read `.monty.yaml` to understand project-specific configuration
+2. Check [PATTERNS.md](PATTERNS.md) for recommended approaches
+3. Check [ANTI_PATTERNS.md](ANTI_PATTERNS.md) for what to avoid
+4. Check [VERSIONING.md](VERSIONING.md) for release strategy
 
 ## AI-Readable Configuration
 
 **`.monty.yaml`** contains machine-readable standards:
 
 ```yaml
-language: node
-versioning: semver
+language: node  # node | python
+versioning: semver  # semver | none
 patterns:
   - name: repository
     description: Use repository pattern for data access
@@ -30,10 +39,9 @@ anti_patterns:
 ```
 
 When consuming a project:
-1. Read `.monty.yaml` to understand project-specific rules
-2. Check [PATTERNS.md](PATTERNS.md) for recommended patterns
-3. Check [ANTI_PATTERNS.md](ANTI_PATTERNS.md) for what to avoid
-4. Check [VERSIONING.md](VERSIONING.md) for version bump rules
+1. Parse `.monty.yaml` for project rules
+2. Reference [PATTERNS.md](PATTERNS.md) for implementation guidance
+3. Reference [ANTI_PATTERNS.md](ANTI_PATTERNS.md) for what to avoid
 
 ## Branch Naming
 
@@ -67,88 +75,56 @@ When consuming a project:
 - `fix:` → PATCH version bump
 - `BREAKING CHANGE:` or `feat!:` → MAJOR version bump
 
-**Example:**
-```
-feat: add user authentication
-
-Implemented JWT-based auth with refresh tokens.
-Added login/logout endpoints.
-
-Closes #123
-```
-
-## Pull Requests
-
-- Create PR from feature branch to main
-- Fill out PR template
-- Ensure CI passes
-- Request review from maintainers
-- Squash and merge
-
 ## Language-Specific
 
 ### Node.js
 
-- Test framework: Vitest
-- Linter: ESLint + Prettier
-- Package manager: npm (or pnpm)
-- See: `templates/node/`
-- Patterns: [PATTERNS.md](PATTERNS.md#nodejs)
-- Anti-patterns: [ANTI_PATTERNS.md](ANTI_PATTERNS.md#nodejs)
+| Topic | Resource |
+|-------|----------|
+| Patterns | [PATTERNS.md](PATTERNS.md#nodejs) |
+| Anti-Patterns | [ANTI_PATTERNS.md](ANTI_PATTERNS.md#nodejs) |
+| Linting | ESLint |
 
 ### Python
 
-- Test framework: pytest
-- Linter: ruff
-- Formatter: black
-- Type hints: Required
-- See: `templates/python/`
-- Patterns: [PATTERNS.md](PATTERNS.md#python)
-- Anti-patterns: [ANTI_PATTERNS.md](ANTI_PATTERNS.md#python)
-
-### Rust
-
-- Test framework: built-in `cargo test`
-- Linter: rustfmt + clippy
-- Error handling: thiserror, anyhow
-- See: `templates/rust/`
-- Patterns: [PATTERNS.md](PATTERNS.md#rust)
-- Anti-patterns: [ANTI_PATTERNS.md](ANTI_PATTERNS.md#rust)
-
-### Go
-
-- Test framework: built-in `go test`
-- Linter: golangci-lint
-- Error handling: explicit with context
-- See: `templates/go/`
-- Patterns: [PATTERNS.md](PATTERNS.md#go)
-- Anti-patterns: [ANTI_PATTERNS.md](ANTI_PATTERNS.md#go)
-
-## CI/CD
-
-Copy `.github/workflows/ci.yml` as a starting point. Customize for your project type.
-
-## Documentation
-
-- [CONTRIBUTING.md](CONTRIBUTING.md) - Contribution guidelines
-- [README.md](README.md) - Project overview
-- [VERSIONING.md](VERSIONING.md) - Semantic versioning strategy
-- [PATTERNS.md](PATTERNS.md) - Design patterns by language
-- [ANTI_PATTERNS.md](ANTI_PATTERNS.md) - Common mistakes to avoid
-- `docs/` - Additional documentation
+| Topic | Resource |
+|-------|----------|
+| Patterns | [PATTERNS.md](PATTERNS.md#python) |
+| Anti-Patterns | [ANTI_PATTERNS.md](ANTI_PATTERNS.md#python) |
+| Linting | ruff |
 
 ## Versioning
 
-All projects use **Semantic Versioning**. See [VERSIONING.md](VERSIONING.md) for:
-- Version format (MAJOR.MINOR.PATCH)
-- When to increment each component
+See [VERSIONING.md](VERSIONING.md) for:
+- Semantic versioning rules
 - Changelog format
 - Release checklist
+
+## When Writing Code
+
+1. Check `.monty.yaml` for project-specific rules
+2. Apply patterns from [PATTERNS.md](PATTERNS.md)
+3. Avoid anti-patterns from [ANTI_PATTERNS.md](ANTI_PATTERNS.md)
+4. Use conventional commits
+5. Handle errors properly
+
+## When Reviewing Code
+
+1. Check for anti-patterns
+2. Verify patterns are applied
+3. Check version bump is correct
+4. Validate error handling
+5. Ensure tests are added
+
+## Documentation
+
+- [CONTRIBUTING.md](CONTRIBUTING.md) - Contribution workflow
+- [README.md](README.md) - Project overview
 
 ## When in Doubt
 
 1. Check `.monty.yaml` for project-specific rules
-2. Read [PATTERNS.md](PATTERNS.md) for recommended patterns
-3. Read [ANTI_PATTERNS.md](ANTI_PATTERNS.md) to avoid common mistakes
-4. Check existing code in the project for examples
+2. Read [PATTERNS.md](PATTERNS.md) for recommended approaches
+3. Read [ANTI_PATTERNS.md](ANTI_PATTERNS.md) to avoid mistakes
+4. Check existing code in the project
 5. Ask for clarification

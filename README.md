@@ -2,35 +2,41 @@
 
 Coding standards, guidelines, and processes for AI assistants and human developers.
 
-This repository contains templates, workflows, and documentation that can be consumed by AI bots or humans to understand how to set up and manage repositories following consistent standards.
+This repository contains **patterns, anti-patterns, and processes** - not templates. AI assistants and humans can use these guidelines to create consistent, maintainable projects without being tied to specific file structures.
+
+## Philosophy
+
+> **Templates are limiting. Guidelines are flexible.**
+
+Instead of copying static templates, use these standards to:
+- Apply consistent patterns across projects
+- Avoid common mistakes
+- Make AI-assisted code reviews faster
+- Onboard new developers quickly
 
 ## What's Inside
 
-### 📋 Standards Documentation
+### 📋 Documentation
 
 | File | Purpose |
 |------|---------|
-| [AGENTS.md](AGENTS.md) | Guidance for AI assistants |
-| [CONTRIBUTING.md](CONTRIBUTING.md) | Contribution workflow |
+| [AGENTS.md](AGENTS.md) | How AI assistants should consume this repo |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Branch naming, commit conventions |
 | [VERSIONING.md](VERSIONING.md) | SemVer strategy |
 | [PATTERNS.md](PATTERNS.md) | Design patterns by language |
 | [ANTI_PATTERNS.md](ANTI_PATTERNS.md) | Common mistakes to avoid |
 
-### 🛠️ Templates
-
-| Language | Framework | Test | Linter | Formatter |
-|----------|-----------|------|--------|-----------|
-| [Node.js](templates/node/) | ES Modules | Vitest | ESLint | Prettier |
-| [Python](templates/python/) | - | pytest | ruff | black |
-| [Rust](templates/rust/) | cargo | built-in | rustfmt | clippy |
-| [Go](templates/go/) | modules | built-in | golangci-lint | gofmt |
-
-### 🔧 Configuration
+### ⚙️ Configuration
 
 | File | Purpose |
 |------|---------|
-| [.monty.yaml](.monty.yaml) | AI-readable project config |
-| [.github/workflows/ci.yml](.github/workflows/ci.yml) | CI template |
+| [.monty.yaml](.monty.yaml) | AI-readable project configuration |
+
+### 📄 Research
+
+| File | Purpose |
+|------|---------|
+| [docs/ANTI_PATTERNS_PROPOSAL.md](docs/ANTI_PATTERNS_PROPOSAL.md) | Research sources for anti-patterns |
 
 ## Quick Start
 
@@ -40,17 +46,17 @@ Read [AGENTS.md](AGENTS.md) first. It explains how to consume this repository.
 
 ### For Humans
 
-```bash
-# Clone this repo
-git clone https://github.com/MontyForged/monty-standards.git
+1. **Choose your language**: Node.js or Python
+2. **Read patterns**: See [PATTERNS.md](PATTERNS.md) for what to do
+3. **Avoid anti-patterns**: See [ANTI_PATTERNS.md](ANTI_PATTERNS.md) for what to avoid
+4. **Configure project**: Copy [.monty.yaml](.monty.yaml) and customize
 
-# Copy Node.js template
-cp -r monty-standards/templates/node your-project/
+## Supported Languages
 
-# Copy configuration
-cp monty-standards/.monty.yaml your-project/
-cp monty-standards/CONTRIBUTING.md your-project/
-```
+| Language | Patterns | Anti-Patterns | Linting |
+|----------|-----------|---------------|---------|
+| Node.js | ✅ | ✅ | ESLint |
+| Python | ✅ | ✅ | ruff |
 
 ## Project Structure
 
@@ -58,41 +64,45 @@ cp monty-standards/CONTRIBUTING.md your-project/
 monty-standards/
 ├── .monty.yaml              # AI-readable config
 ├── AGENTS.md                # AI guidance
-├── CONTRIBUTING.md          # Contribution workflow
-├── VERSIONING.md            # SemVer strategy
+├── CONTRIBUTING.md          # Workflow
+├── VERSIONING.md            # SemVer
 ├── PATTERNS.md              # Design patterns
-├── ANTI_PATTERNS.md         # What to avoid
+├── ANTI_PATTERNS.md         # Mistakes to avoid
 ├── README.md
 ├── LICENSE
-├── .github/
-│   └── workflows/
-│       └── ci.yml           # CI template
-└── templates/
-    ├── node/                # Node.js template
-    ├── python/              # Python template
-    ├── rust/                # Rust template
-    └── go/                  # Go template
+└── docs/
+    └── ANTI_PATTERNS_PROPOSAL.md  # Research
 ```
 
-## Why Monty Standards?
+## Example: Starting a New Project
 
-### 🎯 For AI Assistants
-- **AI-readable config** - `.monty.yaml` lets bots understand project rules
-- **Clear patterns** - Bots can apply correct design patterns
-- **Anti-pattern detection** - Avoid common mistakes automatically
+**Human says:** "Create a Node.js project called 'my-api'"
 
-### 👨‍💻 For Humans
-- **Consistent onboarding** - New developers get up to speed fast
-- **Best practices built-in** - Don't reinvent the wheel
-- **Cross-language familiarity** - Same patterns across projects
+**AI does:**
+1. Creates project with Node.js structure
+2. Configures ESLint with Monty rules
+3. Applies repository pattern for data access
+4. Avoids callback hell by using async/await
+5. Adds error handling to all async functions
+
+Result: Consistent project that follows Monty Standards without copying templates.
+
+## Why This Works
+
+| Approach | Problem | Monty Solution |
+|----------|---------|----------------|
+| Static templates | One-size-fits-all | Flexible guidelines |
+| Copy-paste | Stale code | Living documentation |
+| Implicit rules | Inconsistent | Explicit patterns |
 
 ## Versioning
 
-All projects should use **Semantic Versioning**. See [VERSIONING.md](VERSIONING.md) for:
-
+All projects should use **Semantic Versioning** by default. See [VERSIONING.md](VERSIONING.md) for:
 - When to bump MAJOR/MINOR/PATCH
 - Changelog format
 - Release checklist
+
+Set `versioning: none` in `.monty.yaml` to disable.
 
 ## License
 

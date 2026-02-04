@@ -13,7 +13,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Validate v2.0 structure
+      - name: Validate structure
         run: |
           echo "Validating Monty Standards v2.0 structure..."
           
@@ -40,31 +40,17 @@ jobs:
           echo ""
           echo "Root files validated."
           
-      - name: Check template directories
+      - name: Validate documentation
         run: |
-          template_types=("node" "python" "rust" "go")
-          
-          for type in "${template_types[@]}"; do
-            if [ -d "templates/$type" ]; then
-              echo "OK: Template $type directory exists"
-            else
-              echo "FAIL: Missing template directory: templates/$type"
-              exit 1
-            fi
-          done
-          
-      - name: Check GitHub workflows
-        run: |
-          if [ -d ".github/workflows" ] && [ -f ".github/workflows/ci.yml" ]; then
-            echo "OK: CI workflow present"
+          if [ -d "docs" ]; then
+            echo "OK: docs/ directory present"
+            ls -la docs/
           else
-            echo "FAIL: Missing .github/workflows/ci.yml"
-            exit 1
+            echo "WARN: No docs/ directory"
           fi
           
-      - name: Validate .monty.yaml schema
+      - name: Validate YAML syntax
         run: |
-          # Basic YAML validation
           if command -v python3 &> /dev/null; then
             python3 -c "import yaml; yaml.safe_load(open('.monty.yaml'))"
             echo "OK: .monty.yaml is valid YAML"
@@ -72,19 +58,12 @@ jobs:
             echo "WARN: Skipping YAML validation (python3 not available)"
           fi
           
-      - name: Check template READMEs
-        run: |
-          for type in node python rust go; do
-            if [ -f "templates/$type/README.md" ]; then
-              echo "OK: templates/$type/README.md"
-            else
-              echo "WARN: Missing templates/$type/README.md"
-            fi
-          done
-          
       - name: Summary
         run: |
           echo ""
           echo "=========================================="
           echo "Monty Standards v2.0 Structure: VALID"
           echo "=========================================="
+          echo ""
+          echo "Languages: Node.js, Python"
+          echo "Focus: Patterns + Anti-Patterns (not templates)"

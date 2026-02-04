@@ -34,14 +34,13 @@ git commit -m "feat: add user authentication"
 
 # Push and create PR
 git push -u origin feature/01-my-feature
-# Then create PR at: https://github.com/MontyForged/<repo>/pull/new/feature/01-my-feature
 ```
 
 ## Making Changes
 
 1. Create a new branch from `main`
 2. Make your changes
-3. Test: See language-specific template
+3. Test changes if applicable
 4. Commit with clear message
 5. Push and create PR
 
@@ -73,114 +72,56 @@ git push -u origin feature/01-my-feature
 | `fix:` | PATCH |
 | `BREAKING CHANGE:` | MAJOR |
 
-**Examples:**
-```
-feat: add user authentication
-
-Implements JWT-based auth with refresh tokens.
-
-Closes #123
-```
-
-```
-fix: resolve memory leak in connection pool
-
-The leak occurred when connections were not properly closed.
-
-Fixes #456
-```
-
-```
-feat!: change database schema
-
-BREAKING CHANGE: The user table schema has changed.
-Please run the migration script before deploying.
-
-See: #789
-```
-
-## Pull Request Template
-
-```markdown
-## Description
-
-Brief description of changes
-
-## Type
-
-- [ ] Feature
-- [ ] Bug Fix
-- [ ] Documentation
-- [ ] Refactoring
-- [ ] CI/CD
-
-## Testing
-
-- [ ] Tests pass
-- [ ] Coverage maintained (min 80%)
-- [ ] Manual testing completed
-
-## Checklist
-
-- [ ] Code follows project style
-- [ ] Documentation updated
-- [ ] Tests added/updated
-- [ ] Version bumped (if applicable)
-- [ ] Anti-patterns checked
-```
-
 ## Versioning
 
-All projects use **Semantic Versioning (SemVer)**. See [VERSIONING.md](VERSIONING.md) for:
+All projects should use **Semantic Versioning** by default. See [VERSIONING.md](VERSIONING.md) for:
 
 - Version format (MAJOR.MINOR.PATCH)
 - When to increment each component
 - Changelog format
 - Release checklist
 
-**Quick Reference:**
-
-```
-MAJOR (1.0.0) - Breaking changes
-MINOR (0.1.0) - New features (backward-compatible)
-PATCH (0.0.1) - Bug fixes (backward-compatible)
-```
+Set `versioning: none` in `.monty.yaml` to disable versioning.
 
 ## Design Patterns
 
-See [PATTERNS.md](PATTERNS.md) for recommended patterns by language:
+See [PATTERNS.md](PATTERNS.md) for recommended patterns:
 
 - Repository pattern for data access
 - Factory pattern for test fixtures
 - Service layer for business logic
 - And more...
 
-## Anti-Patterns to Avoid
+## Anti-Patterns
 
 See [ANTI_PATTERNS.md](ANTI_PATTERNS.md) for common mistakes:
 
-- Node.js: Callback hell, implicit any
-- Python: Mutable defaults, wildcard imports
-- Rust: Excessive unwrap, unnecessary clones
-- Go: Error swallowing, package bloat
+- Node.js: Callback hell, unhandled errors, sync I/O
+- Python: Mutable defaults, bare except, missing type hints
 
-## Language-Specific Standards
+## Supported Languages
 
-See `templates/` directory for language-specific configurations:
-
-- `templates/node/` - Node.js with Vitest, ESLint
-- `templates/python/` - Python with pytest, ruff
-- `templates/rust/` - Rust with cargo
-- `templates/go/` - Go with modules
+| Language | Linter |
+|----------|--------|
+| Node.js | ESLint |
+| Python | ruff |
 
 ## Merging
 
 After PR approval:
 
-1. Merge via GitHub UI or: `git checkout main && git merge --no-ff feature/01-my-feature`
-2. Delete the feature branch locally and remotely
-3. Close the associated issue (use "Fixes #123" in PR description)
-4. Update changelog if this is a release
+1. Merge via GitHub UI
+2. Delete the feature branch
+3. Close the issue (use "Fixes #123" in PR description)
+
+## Anti-Pattern Research
+
+When adding new anti-patterns, follow the research process:
+
+1. Search for common anti-patterns in the language
+2. Document sources in [docs/ANTI_PATTERNS_PROPOSAL.md](docs/ANTI_PATTERNS_PROPOSAL.md)
+3. Add to [ANTI_PATTERNS.md](ANTI_PATTERNS.md) with examples
+4. Update [.monty.yaml](.monty.yaml) configuration
 
 ## Code Review Guidelines
 
@@ -189,5 +130,5 @@ For reviewers:
 - Check for anti-patterns in [ANTI_PATTERNS.md](ANTI_PATTERNS.md)
 - Ensure patterns match [PATTERNS.md](PATTERNS.md)
 - Verify version bump is correct
-- Check test coverage
-- Validate documentation updates
+- Validate error handling
+- Check documentation updates
