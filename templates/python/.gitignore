@@ -1,0 +1,44 @@
+# Python
+venv/
+.venv/
+env/
+ENV/
+
+# Bytecode
+*.py[cod]
+*$py.class
+__pycache__/
+*.so
+.Python
+*.egg-info/
+.eggs/
+build/
+develop-eggs/
+
+# Testing
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.pytype/
+
+# Distribution
+dist/
+*.whl
+*.tar.gz
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Misc
+.env*
+.temp/
+.tmp/
