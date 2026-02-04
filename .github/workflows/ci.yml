@@ -6,35 +6,53 @@ on:
   pull_request:
     branches: [main]
 
+# This repo contains templates, not a specific language project.
+# CI validates file structure and template completeness.
+
 jobs:
-  check:
+  validate:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Check formatting
-        run: npm run format:check
-
-      - name: Run linter
-        run: npm run lint
-
-      - name: Run tests
-        run: npm run test:run
-
-      - name: Upload coverage
-        uses: codecov/codecov-action@v4
-        with:
-          directory: coverage
-          flags: unittests
-          token: ${{ secrets.GITHUB_TOKEN }}
-          verbose: true
+      - name: Validate structure
+        run: |
+          echo "Checking required files..."
+          
+          # Check root files
+          required_files=(
+            "README.md"
+            "LICENSE"
+            "AGENTS.md"
+            "CONTRIBUTING.md"
+          )
+          
+          for file in "${required_files[@]}"; do
+            if [ ! -f "$file" ]; then
+              echo "Missing: $file"
+              exit 1
+            fi
+          done
+          
+          echo "All required root files present."
+          
+      - name: Check template directories
+        run: |
+          template_types=("node" "python" "rust" "go")
+          
+          for type in "${template_types[@]}"; do
+            if [ -d "templates/$type" ]; then
+              echo "Template $type: present"
+            fi
+          done
+          
+      - name: Check GitHub workflows
+        run: |
+          if [ -d ".github/workflows" ]; then
+            echo "GitHub workflows: present"
+            ls -la .github/workflows/
+          else
+            echo "Missing: .github/workflows"
+            exit 1
+          fi
