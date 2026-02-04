@@ -1,0 +1,90 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate v2.0 structure
+        run: |
+          echo "Validating Monty Standards v2.0 structure..."
+          
+          # Check required root files
+          required_files=(
+            "README.md"
+            "LICENSE"
+            "AGENTS.md"
+            "CONTRIBUTING.md"
+            "VERSIONING.md"
+            "PATTERNS.md"
+            "ANTI_PATTERNS.md"
+            ".monty.yaml"
+          )
+          
+          for file in "${required_files[@]}"; do
+            if [ ! -f "$file" ]; then
+              echo "FAIL: Missing required file: $file"
+              exit 1
+            fi
+            echo "OK: $file"
+          done
+          
+          echo ""
+          echo "Root files validated."
+          
+      - name: Check template directories
+        run: |
+          template_types=("node" "python" "rust" "go")
+          
+          for type in "${template_types[@]}"; do
+            if [ -d "templates/$type" ]; then
+              echo "OK: Template $type directory exists"
+            else
+              echo "FAIL: Missing template directory: templates/$type"
+              exit 1
+            fi
+          done
+          
+      - name: Check GitHub workflows
+        run: |
+          if [ -d ".github/workflows" ] && [ -f ".github/workflows/ci.yml" ]; then
+            echo "OK: CI workflow present"
+          else
+            echo "FAIL: Missing .github/workflows/ci.yml"
+            exit 1
+          fi
+          
+      - name: Validate .monty.yaml schema
+        run: |
+          # Basic YAML validation
+          if command -v python3 &> /dev/null; then
+            python3 -c "import yaml; yaml.safe_load(open('.monty.yaml'))"
+            echo "OK: .monty.yaml is valid YAML"
+          else
+            echo "WARN: Skipping YAML validation (python3 not available)"
+          fi
+          
+      - name: Check template READMEs
+        run: |
+          for type in node python rust go; do
+            if [ -f "templates/$type/README.md" ]; then
+              echo "OK: templates/$type/README.md"
+            else
+              echo "WARN: Missing templates/$type/README.md"
+            fi
+          done
+          
+      - name: Summary
+        run: |
+          echo ""
+          echo "=========================================="
+          echo "Monty Standards v2.0 Structure: VALID"
+          echo "=========================================="

@@ -1,0 +1,139 @@
+# Monty Standards Configuration
+# Machine-readable config for AI agents and tools
+
+# Project metadata
+name: my-project
+description: My project description
+version: 0.1.0
+
+# Language and tooling
+language: node  # node | python | rust | go
+versioning: semver  # semver | calver | none
+
+# Design patterns by language
+patterns:
+  node:
+    - name: repository
+      description: Use repository pattern for data access
+      file_pattern: "**/repositories/*.js"
+      example: |
+        // src/repositories/user.repository.js
+        export class UserRepository {
+          constructor(db) { this.db = db }
+          async findById(id) { return this.db.users.find(id) }
+        }
+    - name: factory
+      description: Use factory pattern for test fixtures
+      file_pattern: "**/factories/*.js"
+    - name: service-layer
+      description: Business logic in services, not controllers
+      file_pattern: "**/services/*.js"
+  python:
+    - name: dataclass
+      description: Use dataclasses for DTOs and simple objects
+      file_pattern: "**/*.py"
+    - name: context-manager
+      description: Use context managers for resource handling
+      file_pattern: "**/*.py"
+    - name: abstract-base-class
+      description: Use ABCs for interfaces and contracts
+      file_pattern: "**/*.py"
+  rust:
+    - name: builder
+      description: Use Builder pattern for complex structs
+      file_pattern: "**/*.rs"
+    - name: error-chaining
+      description: Chain errors with ? operator
+      file_pattern: "**/*.rs"
+  go:
+    - name: functional-options
+      description: Use functional options for configuration
+      file_pattern: "**/*.go"
+    - name: package-structure
+      description: cmd/ for CLIs, pkg/ for libraries, internal/ for private
+      file_pattern: "**/"
+
+# Anti-patterns to avoid
+anti_patterns:
+  node:
+    - name: callback-hell
+      description: Nested callbacks make code hard to read
+      instead: Use async/await or Promises
+      severity: error
+    - name: god-object
+      description: Single class with too many responsibilities
+      instead: Split into focused, single-responsibility classes
+      severity: warning
+    - name: implicit-any
+      description: Missing type annotations
+      instead: Use JSDoc or TypeScript
+      severity: warning
+  python:
+    - name: mutable-defaults
+      description: Using mutable defaults in function signatures
+      instead: Use None as default and initialize inside
+      severity: error
+    - name: wildcard-imports
+      description: from module import *
+      instead: Import specific symbols
+      severity: warning
+  rust:
+    - name: unwrap-everywhere
+      description: Excessive use of unwrap()
+      instead: Handle errors explicitly with ?
+      severity: warning
+    - name: clone-happy
+      description: Unnecessary clones
+      instead: Use references or Arc/Rc where appropriate
+      severity: warning
+  go:
+    - name: error-swallowing
+      description: Ignoring errors with _ blank identifier
+      instead: Handle or log errors explicitly
+      severity: error
+    - name: package-bloat
+      description: Putting everything in main package
+      instead: Organize into cmd/, pkg/, internal/
+      severity: warning
+
+# Conventional commits configuration
+commits:
+  types:
+    - feat
+    - fix
+    - docs
+    - refactor
+    - test
+    - ci
+    - chore
+  scopes:
+    required: false
+
+# Version bump rules
+versioning:
+  major_triggers:
+    - "BREAKING CHANGE"
+    - "feat!:"
+  minor_triggers:
+    - "feat:"
+  patch_triggers:
+    - "fix:"
+    - "refactor:"
+    - "docs:"
+
+# Testing requirements
+testing:
+  framework: vitest  # node
+  coverage_min: 80
+  test_pattern: "**/*.test.js"
+
+# Documentation requirements
+docs:
+  required:
+    - README.md
+    - CONTRIBUTING.md
+    - LICENSE
+  optional:
+    - API.md
+    - ARCHITECTURE.md
+    - CHANGELOG.md
