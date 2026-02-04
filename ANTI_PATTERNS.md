@@ -2,6 +2,15 @@
 
 Common mistakes to avoid in each language. These are the most impactful anti-patterns based on industry research.
 
+## Hierarchy: Rules vs Guidance
+
+| Category | Meaning | Impact | Enforcement |
+|----------|---------|--------|-------------|
+| **Rules** | Must follow | Causes bugs/security issues | CI failure |
+| **Guidance** | Should follow | Maintainability issues | Warning |
+
+See `.monty.yaml` for which category each anti-pattern falls into.
+
 ## Node.js
 
 ### 1. Callback Hell ❌
@@ -271,14 +280,32 @@ with open('data.txt', 'r') as file:
 
 ## Severity Levels
 
-| Level | Meaning |
-|-------|---------|
-| ERROR | Will cause bugs or security issues - avoid |
-| WARNING | Code smell - should be refactored when possible |
-| INFO | Style preference - consider but not required |
+| Level | Meaning | Enforcement |
+|-------|---------|-------------|
+| ERROR | Will cause bugs or security issues | CI failure (rule) |
+| WARNING | Code smell | Warning (guidance) |
+| INFO | Style preference | Suggestion |
+
+## Overrides: Documented Exceptions
+
+Individual repos can override rules/guidance. All overrides MUST be documented in `.monty.yaml`:
+
+```yaml
+overrides:
+  - anti-pattern: no-mutable-defaults
+    override: true
+    rationale: "Using functools.lru_cache requires mutable defaults"
+    approved-by: tech-lead
+    date: 2026-02-04
+```
+
+When you encounter an override:
+1. Accept it as valid for this project
+2. The rationale explains the exception
+3. Don't flag it as an issue in code review
 
 ## Related
 
 - [docs/ANTI_PATTERNS_PROPOSAL.md](docs/ANTI_PATTERNS_PROPOSAL.md) - Research and sources
 - [PATTERNS.md](PATTERNS.md) - Recommended patterns
-- `.monty.yaml` - Project-specific anti-pattern configuration
+- `.monty.yaml` - Project-specific rules/guidance configuration

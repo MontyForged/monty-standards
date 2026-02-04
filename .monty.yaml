@@ -8,75 +8,104 @@ version: 0.1.0
 
 # Language and tooling
 language: node  # node | python
-versioning: semver  # semver | calver | none (default: semver)
+versioning: semver  # semver | none (default: semver)
 
-# Design patterns by language
-patterns:
+# ============================================================
+# RULES (MUST FOLLOW)
+# ============================================================
+# These are hard requirements. Breaking these will cause
+# bugs, security issues, or data corruption.
+# Individual repos CANNOT override rules without documenting why.
+rules:
   node:
-    - name: repository
+    - name: error-handling
+      description: All async operations must handle errors
+      rationale: Unhandled errors cause silent failures and data corruption
+      enforcement: lint-error
+    - name: no-sync-io
+      description: Do not use synchronous I/O operations
+      rationale: Blocks event loop, causes performance issues
+      enforcement: lint-error
+    - name: input-validation
+      description: Validate all external input
+      rationale: Prevents injection attacks and data corruption
+      enforcement: code-review
+    - name: no-eval
+      description: Never use eval() or similar code execution
+      rationale: Security vulnerability
+      enforcement: lint-error
+  python:
+    - name: no-mutable-defaults
+      description: Do not use mutable default arguments
+      rationale: Causes subtle bugs with shared state
+      enforcement: lint-error
+    - name: input-validation
+      description: Validate all external input
+      rationale: Prevents injection attacks and data corruption
+      enforcement: code-review
+    - name: no-bare-except
+      description: Do not catch Exception without specific type
+      rationale: Hides bugs and makes debugging harder
+      enforcement: lint-error
+
+# ============================================================
+# GUIDANCE (SHOULD FOLLOW)
+# ============================================================
+# These are recommendations. Breaking these will cause
+# maintainability issues, technical debt, or bugs.
+# Individual repos can override with justification.
+guidance:
+  node:
+    - name: async-await
+      description: Prefer async/await over callbacks
+      rationale: Better readability and error handling
+    - name: type-annotations
+      description: Use JSDoc or TypeScript for type safety
+      rationale: Catches errors at compile time
+    - name: repository-pattern
       description: Use repository pattern for data access
-      example: |
-        // src/repositories/user.repository.js
-        export class UserRepository {
-          constructor(db) { this.db = db }
-          async findById(id) { return this.db.users.find(id) }
-        }
-    - name: factory
-      description: Use factory pattern for test fixtures
+      rationale: Separates concerns, easier testing
     - name: service-layer
       description: Business logic in services, not handlers
+      rationale: Reusable, testable business logic
+    - name: short-functions
+      description: Keep functions under 30 lines
+      rationale: Improves readability and testability
+    - name: single-responsibility
+      description: Each module/class has one purpose
+      rationale: Easier to understand and maintain
   python:
+    - name: type-hints
+      description: Add type hints to all functions
+      rationale: Self-documenting code, better IDE support
     - name: dataclass
-      description: Use dataclasses for DTOs and simple objects
+      description: Use dataclasses for simple data objects
+      rationale: Boilerplate reduction, type safety
     - name: context-manager
-      description: Use context managers for resource handling
+      description: Use with statements for resources
+      rationale: Prevents resource leaks
     - name: abstract-base-class
-      description: Use ABCs for interfaces and contracts
+      description: Use ABCs for interfaces
+      rationale: Clear contracts, polymorphism
+    - name: short-functions
+      description: Keep functions under 50 lines
+      rationale: Improves readability and testability
+    - name: single-responsibility
+      description: Each function/class has one purpose
+      rationale: Easier to understand and maintain
 
-# Anti-patterns to avoid (see docs/ANTI_PATTERNS_PROPOSAL.md for details)
-anti_patterns:
-  node:
-    - name: callback-hell
-      description: Nested callbacks make code hard to read
-      instead: Use async/await or Promises
-      severity: error
-    - name: unhandled-errors
-      description: Not catching promise rejections or errors
-      instead: Always handle or propagate errors
-      severity: error
-    - name: sync-io
-      description: Using synchronous I/O operations
-      instead: Use async/await with fs.promises
-      severity: error
-    - name: god-object
-      description: Single class/module with too many responsibilities
-      instead: Split into focused units
-      severity: warning
-    - name: implicit-any
-      description: Missing type annotations
-      instead: Use JSDoc or TypeScript
-      severity: warning
-  python:
-    - name: mutable-defaults
-      description: Using mutable defaults in function signatures
-      instead: Use None as default and initialize inside
-      severity: error
-    - name: wildcard-imports
-      description: from module import *
-      instead: Import specific symbols
-      severity: warning
-    - name: missing-type-hints
-      description: Functions without type annotations
-      instead: Add type hints to all functions
-      severity: warning
-    - name: bare-except
-      description: Catching Exception without specific type
-      instead: Catch specific exception types
-      severity: error
-    - name: no-context-manager
-      description: Not using with statement for resources
-      instead: Use context managers for file/db/network
-      severity: warning
+# ============================================================
+# OVERRIDES (Documented Exceptions)
+# ============================================================
+# Individual repos can override rules/guidance.
+# All overrides MUST be documented here with rationale.
+overrides: []
+# Example:
+# - rule: no-mutable-defaults
+#   override: true
+#   rationale: "Using functools.lru_cache requires mutable defaults"
+#   approved-by: tech-lead
+#   date: 2026-02-04
 
 # Conventional commits configuration
 commits:

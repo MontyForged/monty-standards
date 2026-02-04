@@ -28,20 +28,79 @@ Instead of copying files, use these standards to:
 **`.monty.yaml`** contains machine-readable standards:
 
 ```yaml
-language: node  # node | python
-versioning: semver  # semver | none
-patterns:
-  - name: repository
-    description: Use repository pattern for data access
-anti_patterns:
-  - name: callback-hell
-    description: Nested callbacks make code hard to read
+language: node
+versioning: semver
+rules:
+  - name: error-handling
+    description: All async operations must handle errors
+    enforcement: lint-error
+guidance:
+  - name: async-await
+    description: Prefer async/await over callbacks
+overrides:
+  - rule: no-mutable-defaults
+    override: true
+    rationale: "Using lru_cache requires mutable defaults"
 ```
 
+### Hierarchy of Standards
+
+| Category | Meaning | Can Override? |
+|----------|---------|---------------|
+| **Rules** | Must follow - causes bugs/security issues | No (without documented exception) |
+| **Guidance** | Should follow - maintainability | Yes, with justification |
+
 When consuming a project:
-1. Parse `.monty.yaml` for project rules
-2. Reference [PATTERNS.md](PATTERNS.md) for implementation guidance
-3. Reference [ANTI_PATTERNS.md](ANTI_PATTERNS.md) for what to avoid
+1. Parse `.monty.yaml` for rules and guidance
+2. Apply rules strictly (errors in CI)
+3. Apply guidance as warnings (code review)
+4. Check `overrides` for documented exceptions
+
+## Rules vs Guidance
+
+### Rules (Must Follow)
+
+Rules prevent **bugs, security issues, or data corruption**:
+
+| Language | Rule | Why |
+|----------|------|-----|
+| Node.js | Error handling | Silent failures corrupt data |
+| Node.js | No sync I/O | Blocks event loop |
+| Python | No mutable defaults | Shared state causes subtle bugs |
+| Python | No bare except | Hides bugs |
+
+**Breaking a rule = CI failure**
+
+### Guidance (Should Follow)
+
+Guidance improves **maintainability and code quality**:
+
+| Language | Guidance | Why |
+|----------|----------|-----|
+| Node.js | async/await | Readability |
+| Python | Type hints | Self-documenting |
+| Both | Short functions | Readability |
+| Both | Repository pattern | Testability |
+
+**Breaking guidance = Warning**
+
+## Overrides (Documented Exceptions)
+
+Individual repos can override rules/guidance, but MUST document:
+
+```yaml
+overrides:
+  - rule: no-mutable-defaults
+    override: true
+    rationale: "Using functools.lru_cache requires mutable defaults"
+    approved-by: tech-lead
+    date: 2026-02-04
+```
+
+When you see an override:
+1. Accept it as valid for this project
+2. Understand the rationale
+3. Don't flag it as an issue
 
 ## Branch Naming
 
