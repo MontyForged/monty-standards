@@ -23,7 +23,18 @@ Instead of copying static templates, use these standards to:
 | [AGENTS.md](AGENTS.md) | How AI assistants should consume this repo |
 | [CONTRIBUTING.md](CONTRIBUTING.md) | Branch naming, commit conventions |
 | [VERSIONING.md](VERSIONING.md) | SemVer strategy |
+
+### 🛠️ Patterns
+
+| Directory | Purpose |
+|----------|---------|
 | [PATTERNS.md](PATTERNS.md) | Design patterns by language |
+| [PATTERNS/](PATTERNS/) | Proven patterns (weighted memory, etc.) |
+
+### ⚠️ Anti-Patterns
+
+| File | Purpose |
+|------|---------|
 | [ANTI_PATTERNS.md](ANTI_PATTERNS.md) | Common mistakes to avoid |
 
 ### ⚙️ Configuration
@@ -46,10 +57,9 @@ Read [AGENTS.md](AGENTS.md) first. It explains how to consume this repository.
 
 ### For Humans
 
-1. **Choose your language**: Node.js or Python
-2. **Read patterns**: See [PATTERNS.md](PATTERNS.md) for what to do
-3. **Avoid anti-patterns**: See [ANTI_PATTERNS.md](ANTI_PATTERNS.md) for what to avoid
-4. **Configure project**: Copy [.monty.yaml](.monty.yaml) and customize
+1. **Read patterns**: See [PATTERNS.md](PATTERNS.md) for what to do
+2. **Avoid anti-patterns**: See [ANTI_PATTERNS.md](ANTI_PATTERNS.md) for what to avoid
+3. **Configure project**: Copy [.monty.yaml](.monty.yaml) and customize
 
 ## Supported Languages
 
@@ -57,6 +67,14 @@ Read [AGENTS.md](AGENTS.md) first. It explains how to consume this repository.
 |----------|-----------|---------------|---------|
 | Node.js | ✅ | ✅ | ESLint |
 | Python | ✅ | ✅ | ruff |
+
+## Featured Patterns
+
+| Pattern | Status | Tested In |
+|---------|--------|-----------|
+| [Weighted Memory System](PATTERNS/weighted-memory-system.md) | Pattern | clawdit |
+
+A memory system that accumulates knowledge over time, with weighted importance and decay only on neglect.
 
 ## Project Structure
 
@@ -66,12 +84,14 @@ monty-standards/
 ├── AGENTS.md                # AI guidance
 ├── CONTRIBUTING.md          # Workflow
 ├── VERSIONING.md            # SemVer
-├── PATTERNS.md              # Design patterns
+├── PATTERNS.md              # Pattern index
+├── PATTERNS/               # Pattern implementations
+│   └── weighted-memory-system.md
 ├── ANTI_PATTERNS.md         # Mistakes to avoid
 ├── README.md
 ├── LICENSE
 └── docs/
-    └── ANTI_PATTERNS_PROPOSAL.md  # Research
+    └── ANTI_PATTERNS_PROPOSAL.md
 ```
 
 ## Example: Starting a New Project

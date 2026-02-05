@@ -166,6 +166,10 @@ See [VERSIONING.md](VERSIONING.md) for:
 3. Avoid anti-patterns from [ANTI_PATTERNS.md](ANTI_PATTERNS.md)
 4. Use conventional commits
 5. Handle errors properly
+6. **Always run `npm run check` (or project equivalent) before committing**
+   - This runs format, lint, and tests
+   - If the project has a pre-commit hook, it will catch issues
+   - If not, run the check command manually
 
 ## When Reviewing Code
 
