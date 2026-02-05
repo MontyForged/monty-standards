@@ -1,0 +1,69 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Validate structure
+        run: |
+          echo "Validating Monty Standards v2.0 structure..."
+          
+          # Check required root files
+          required_files=(
+            "README.md"
+            "LICENSE"
+            "AGENTS.md"
+            "CONTRIBUTING.md"
+            "VERSIONING.md"
+            "PATTERNS.md"
+            "ANTI_PATTERNS.md"
+            ".monty.yaml"
+          )
+          
+          for file in "${required_files[@]}"; do
+            if [ ! -f "$file" ]; then
+              echo "FAIL: Missing required file: $file"
+              exit 1
+            fi
+            echo "OK: $file"
+          done
+          
+          echo ""
+          echo "Root files validated."
+          
+      - name: Validate documentation
+        run: |
+          if [ -d "docs" ]; then
+            echo "OK: docs/ directory present"
+            ls -la docs/
+          else
+            echo "WARN: No docs/ directory"
+          fi
+          
+      - name: Validate YAML syntax
+        run: |
+          if command -v python3 &> /dev/null; then
+            python3 -c "import yaml; yaml.safe_load(open('.monty.yaml'))"
+            echo "OK: .monty.yaml is valid YAML"
+          else
+            echo "WARN: Skipping YAML validation (python3 not available)"
+          fi
+          
+      - name: Summary
+        run: |
+          echo ""
+          echo "=========================================="
+          echo "Monty Standards v2.0 Structure: VALID"
+          echo "=========================================="
+          echo ""
+          echo "Languages: Node.js, Python"
+          echo "Focus: Patterns + Anti-Patterns (not templates)"
