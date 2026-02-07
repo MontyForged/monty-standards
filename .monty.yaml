@@ -34,6 +34,10 @@ rules:
       description: Never use eval() or similar code execution
       rationale: Security vulnerability
       enforcement: lint-error
+    - name: record-in-github
+      description: Record decisions and discussions in GitHub issues/PRs
+      rationale: Preserves institutional knowledge for future contributors
+      enforcement: code-review
   python:
     - name: no-mutable-defaults
       description: Do not use mutable default arguments
@@ -47,6 +51,10 @@ rules:
       description: Do not catch Exception without specific type
       rationale: Hides bugs and makes debugging harder
       enforcement: lint-error
+    - name: record-in-github
+      description: Record decisions and discussions in GitHub issues/PRs
+      rationale: Preserves institutional knowledge for future contributors
+      enforcement: code-review
 
 # ============================================================
 # GUIDANCE (SHOULD FOLLOW)
